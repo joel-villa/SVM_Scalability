@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from generator import make_classification
 
 class LinearSVC:
@@ -56,7 +57,7 @@ class LinearSVC:
         for _ in range(self.n_iter):
             y_hat = []
             for xi, target, i in zip(X, y, range(n)):
-                y_hat.append(self.predict(xi))
+                y_hat.append(self.net_input(xi))
                 update = self.eta * (target - y_hat[i])
                 self.w_ += update * xi
                 self.b_ += update
@@ -95,7 +96,16 @@ if __name__ == "__main__":
     # i = 1
     X, y = make_classification(  10, rand_seed= 10)
     print(y)
-    lvc = LinearSVC()
+    lvc = LinearSVC(n_iter=1000000)
     lvc.fit(X, y)
     y_hat = lvc.predict(X)
     print(y_hat)
+    # print(lvc.losses_)
+
+    fig, ax = plt.subplots(figsize=(16,8))
+
+    ax.plot(range(1, len(lvc.losses_) + 1), (lvc.losses_), marker='')
+    ax.set_xlabel('Epochs')
+    ax.set_ylabel('Losses')
+    ax.set_title("Linear SVC Losses over Epochs")
+    plt.show()
