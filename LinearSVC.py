@@ -59,7 +59,7 @@ class LinearSVC:
             y_hat = self.net_input(X)
             # y_hat = self.predict(X)
             # errors = (y - net_input)
-            loss = self._hinge_funct_(y, y_hat)
+            loss = self._losses_(y, y_hat)
 
             #TODO: FIX THIS ahhhhhh, 
 
@@ -68,9 +68,10 @@ class LinearSVC:
 
             #Gradient of the bias 
             grad_b = y
-            # grad_b = np.sum(loss * y)
+            print(f"loss: \n{loss}\ngrad_w: \n{grad_w}\n grad_b:\n{grad_b}")
 
-            self.w_ += self.eta * grad_w
+
+            self.w_ -= self.eta * grad_w
             self.b_ -= self.eta * grad_b
 
             hinge_loss = self._hinge_loss_(loss, C)
@@ -110,8 +111,9 @@ class LinearSVC:
                 self.w_ += update * xi
                 self.b_ += update
                 # errors += update != 0.0
-            losses = self.hinge_loss(y, y_hat, C)
-            self.losses_.append(losses)
+            losses = self._losses_(y, y_hat)
+            loss = self._hinge_loss_(losses, C)
+            self.losses_.append(loss)
         return self
     
     def net_input(self, X):
@@ -127,28 +129,29 @@ class LinearSVC:
     Calculate the hinge loss of all samples
     """
 
-    def _hinge_loss_(self, loss, C):
+    def _hinge_loss_(self, losses, C):
         weight_mag = np.linalg.norm(self.w_)
-        return C * loss + 0.5 * weight_mag * weight_mag
+        return C * np.mean(losses) + 0.5 * weight_mag * weight_mag
     
     """
     The hinge lost function
     """
-    def _hinge_funct_(self, y, y_hat):
+    def _losses_(self, y, y_hat):
         vals = 1 - y * y_hat
+        # print(f"vals:{vals}")
 
         # If vals[i] is less than zero, put zero, otherwise keep vals[i]
-        return np.mean(np.where((vals <= 0 ), 0, vals))
+        return np.where((vals <= 0 ), 0, vals)
         
 
 if __name__ == "__main__":
     # i = 1
     X, y = make_classification(  10, rand_seed= 10)
-    print(y)
+    # print(y)
     lvc = LinearSVC(n_iter=100)
-    lvc.fit(X, y)
+    lvc.fit_old(X, y)
     y_hat = lvc.predict(X)
-    print(y_hat)
+    # print(y_hat)
     # print(lvc.losses_)
 
     fig, ax = plt.subplots(figsize=(16,8))
