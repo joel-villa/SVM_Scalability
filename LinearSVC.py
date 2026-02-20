@@ -55,11 +55,14 @@ class LinearSVC:
         self.losses_ = []
         
         for _ in range(self.n_iter):
-            # Perceptron logic
-            y_hat = []
+            # Adopted from perceptron loop
+            y_hat = [] # The guesses of this itteration
+            hinge_loss = []   
             for xi, yi in zip(X, y):
-                y_hat.append(self.net_input(xi))
-                # update = self.eta * (yi - y_hat[-1]) 
+                y_hati = self.net_input(xi) # Guess for i'th sample in current itteration
+                y_hat.append(y_hati)
+                hinge_lossi = self._losses_(yi, y_hati) # i'th loss 
+                hinge_loss.append()
 
                 # Gradient
                 grad_w = - self.eta * yi * xi
