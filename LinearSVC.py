@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from generator import make_classification
+from generator import make_classification 
+from generator import gen_plot
 
 class LinearSVC:
     """Linear SVC classifier.
@@ -105,11 +106,14 @@ class LinearSVC:
 
 if __name__ == "__main__":
     # i = 1
-    X, y = make_classification(10, rand_seed= 10)
-    # print(y)
+    X, y, a = make_classification(10, rand_seed= 10)
+    
     lvc = LinearSVC(n_iter=500)
     lvc.fit(X, y)
     y_hat = lvc.predict(X)
+
+    print(y_hat)
+    gen_plot(X, y_hat, a)
 
     fig, ax = plt.subplots(figsize=(16,8))
 
