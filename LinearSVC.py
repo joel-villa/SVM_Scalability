@@ -68,11 +68,14 @@ class LinearSVC:
 
                 if hinge_lossi > 0:  
                     # Gradient
-                    grad_w = - yi * xi
-                    grad_b = - yi
+                    grad_w = self.w_ - C * yi * xi
+                    grad_b = - C * yi
+                else:
+                    grad_w = self.w_
+                    grad_b = 0
 
-                    self.w_ -= self.eta * grad_w
-                    self.b_ -= self.eta * grad_b
+                self.w_ += self.eta * grad_w
+                self.b_ += self.eta * grad_b
             loss = self._hinge_loss_(hinge_loss, C)
             self.losses_.append(loss)
         return self
@@ -106,10 +109,10 @@ class LinearSVC:
 
 if __name__ == "__main__":
     # i = 1
-    X, y, a = make_classification(10, rand_seed= 10)
+    X, y, a = make_classification(100, rand_seed= 10)
     
-    lvc = LinearSVC(n_iter=500)
-    lvc.fit(X, y)
+    lvc = LinearSVC(n_iter=100)
+    lvc.fit(X, y, C=10)
     y_hat = lvc.predict(X)
 
     print(y_hat)
