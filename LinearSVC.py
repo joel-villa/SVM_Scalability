@@ -67,13 +67,12 @@ class LinearSVC:
 
                 if hinge_lossi > 0:  
                     # Gradient
-                    grad_w = - self.eta * yi * xi
-                    grad_b = -self.eta * yi
-                    # print(f"grad_w: {grad_w}\ngrad_b:{grad_b}")
-                    self.w_ -= grad_w
-                    self.b_ -= grad_b
-            ls = self._losses_(y, y_hat)
-            loss = self._hinge_loss_(ls, C)
+                    grad_w = - yi * xi
+                    grad_b = - yi
+
+                    self.w_ -= self.eta * grad_w
+                    self.b_ -= self.eta * grad_b
+            loss = self._hinge_loss_(hinge_loss, C)
             self.losses_.append(loss)
         return self
     
@@ -99,7 +98,6 @@ class LinearSVC:
     """
     def _losses_(self, y, y_hat):
         vals = 1 - y * y_hat
-        # print(f"vals:{vals}")
 
         # If vals[i] is less than zero, put zero, otherwise keep vals[i]
         return np.where((vals <= 0 ), 0, vals)
@@ -107,13 +105,11 @@ class LinearSVC:
 
 if __name__ == "__main__":
     # i = 1
-    X, y = make_classification(  10, rand_seed= 10)
+    X, y = make_classification(10, rand_seed= 10)
     # print(y)
     lvc = LinearSVC(n_iter=500)
     lvc.fit(X, y)
     y_hat = lvc.predict(X)
-    # print(y_hat)
-    # print(lvc.losses_)
 
     fig, ax = plt.subplots(figsize=(16,8))
 
