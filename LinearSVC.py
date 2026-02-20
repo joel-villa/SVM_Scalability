@@ -54,6 +54,49 @@ class LinearSVC:
         self.b_ = np.float64(0.)
         self.losses_ = []
         
+        for _ in range(self.n_iter):
+            # Perceptron logic
+            y_hat = []
+            for xi, yi in zip(X, y):
+                y_hat.append(self.net_input(xi))
+                # update = self.eta * (yi - y_hat[-1]) 
+
+                # Gradient
+                grad_w = - self.eta * yi * xi
+                grad_b = self.eta * yi
+
+                self.w_ += grad_w
+                self.b_ += grad_b
+                # errors += update != 0.0
+            ls = self._losses_(y, y_hat)
+            loss = self._hinge_loss_(ls, C)
+            self.losses_.append(loss)
+        return self
+
+    def fit_grad_descent(self, X, y, C=1):
+        """Fit training data.
+        
+        Parameters
+        ----------
+        X : {array-like}, shape = [n_examples, n_features]
+          Training vectors, where n_examples is the number of 
+          examples and n_features is the number of features.
+        y : array-like, shape = [n_examples]
+          Target values.
+        
+        Returns
+        -------
+        self : object
+        
+        """
+        n = y.size # number of samples
+
+        rgen = np.random.RandomState(self.random_state)
+        self.w_ = rgen.normal(loc=0.0, scale=0.01,
+                              size=X.shape[1])
+        self.b_ = np.float64(0.)
+        self.losses_ = []
+        
         for i in range(self.n_iter):
             # Gradient Descent logic (ish)
             y_hat = self.net_input(X)
@@ -64,21 +107,25 @@ class LinearSVC:
             #TODO: FIX THIS ahhhhhh, 
 
             # Gradient of the weights
-            grad_w = np.where((loss <= 0), 0, np.dot(-y, X))
+            print(-np.dot(X.T, y))
+            # print(loss)
+
+            # print(y)
+            grad_w = np.where((loss <= 0), 0, -np.dot(X.T, y))
 
             #Gradient of the bias 
             grad_b = y
-            print(f"loss: \n{loss}\ngrad_w: \n{grad_w}\n grad_b:\n{grad_b}")
+            # print(f"loss: \n{loss}\ngrad_w: \n{grad_w}\n grad_b:\n{grad_b}")
 
 
-            self.w_ -= self.eta * grad_w
+            # self.w_ -= self.eta * grad_w
             self.b_ -= self.eta * grad_b
 
             hinge_loss = self._hinge_loss_(loss, C)
             self.losses_.append(hinge_loss)
         return self
 
-    def fit_old(self, X, y, C=1):
+    def fit_perceptron(self, X, y, C=1):
         """Fit training data.
         
         Parameters
@@ -148,8 +195,8 @@ if __name__ == "__main__":
     # i = 1
     X, y = make_classification(  10, rand_seed= 10)
     # print(y)
-    lvc = LinearSVC(n_iter=100)
-    lvc.fit_old(X, y)
+    lvc = LinearSVC(n_iter=50)
+    lvc.fit(X, y)
     y_hat = lvc.predict(X)
     # print(y_hat)
     # print(lvc.losses_)
