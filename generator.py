@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+from plots.part_one import gen_plot
 
 SEED = 1
 
@@ -49,37 +49,6 @@ def make_classification(n, d = 2, u = 1, rand_seed=SEED):
             print("regenerating point")
 
     return (x, y, a)
-
-"""
-Generate points on a line
-"""
-def get_line_pts(a, u=1):
-    xs = np.linspace(-u, u, 100)
-    if (a[1] == 0):
-        print("ERROR: VERTICAL LINE")
-        return 0
-    ys = -(a[0] / a[1]) * xs # a1 * x + a2 * y = 0  -> y = -a1 * x / a2
-    return (xs, ys)    
-
-"""
-generate a plot given points, labels, and the coefficients defining a hyper plane 
-NOTE: Will only work for 2D
-"""
-def gen_plot(pts, labels, a, u=1):
-    # Transpose separate x and y coordinate arrays
-    x, y = pts.T 
-
-    (x_plot, y_plot) = get_line_pts(a, u)
-
-    plt.plot(x_plot, y_plot, label='hyperplane', color='black')
-
-    colors = np.where(labels == 1, 'red', 'blue')
-    plt.scatter(x, y, c=colors, s=10, marker='x') # 'c' for colors, 's' for size
-
-    # Set bounds of graph
-    plt.ylim(-u, u)
-
-    plt.show()
 
 def make_classification_test():
     (x, y, a) = make_classification(  10, rand_seed= 10)

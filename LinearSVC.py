@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from generator import make_classification 
-from generator import gen_plot
+from plots.part_one import gen_plot
+from plots.part_one import display_margins
 
 class LinearSVC:
     """Linear SVC classifier.
@@ -110,14 +111,16 @@ class LinearSVC:
 
 if __name__ == "__main__":
     # i = 1
-    X, y, a = make_classification(100, rand_seed= 10)
+    X, y, a = make_classification(10000, rand_seed= 11)
     
-    lvc = LinearSVC(n_iter=100000, eta=0.001)
-    lvc.fit(X, y, C=100)
+    lvc = LinearSVC(n_iter=1000, eta=0.001)
+    lvc.fit(X, y, C=10)
     y_hat = lvc.predict(X)
 
     # print(y_hat)
     gen_plot(X, y_hat, a)
+    display_margins(X, y_hat, lvc.w_, lvc.b_)
+    
 
     fig, ax = plt.subplots(figsize=(16,8))
     # print(lvc.losses_)
