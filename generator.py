@@ -28,7 +28,7 @@ def make_classification(n, d = 2, u = 1, rand_seed=SEED):
 
     # Output variables
     x = rng.random(size=(n, d)) # n randomly generated points (uniform distribution [0, 1)) 
-    y = np.zeros(n) # Labels 
+    y = np.ones(n) # Labels 
 
     # Scale x to the hypercube
     x = ((2 * u) * x)  - u 
@@ -38,9 +38,9 @@ def make_classification(n, d = 2, u = 1, rand_seed=SEED):
         total = 0
         for j in range(d):
             total += x[i, j] * a[j]
-        if total > 0:
+        if total < 0:
             #  Above hyper plane
-            y[i] = 1
+            y[i] = -1
         
         elif total == 0:
             # On hyper plane, regenerate:
