@@ -81,6 +81,12 @@ def plot_loss_grid(results):
     fig, axs = plt.subplots(len(ds), len(ns), figsize=(18, 12), sharey=True)
     fig.suptitle("Loss Convergence across datasets", fontsize=16)
 
+    fig.subplots_adjust(
+        top=0.90,
+        hspace=0.5,
+        wspace=0.3
+    )
+
     for i, d in enumerate(ds):
         for j, n in enumerate(ns):
             ax = axs[i][j]
@@ -93,9 +99,11 @@ def plot_loss_grid(results):
             ax.set_xlabel("Epoch")
             ax.set_ylabel("Loss")
 
+            print(f"d: {d}, n: {n}, time: {fit_time}s")
+
             ax.grid(True)
 
-    plt.tight_layout()
+    plt.tight_layout(rect=[0, 0, 1, 0.95])
     plt.savefig("plots/loss_convergence_grid.svg")
     plt.show()
 
