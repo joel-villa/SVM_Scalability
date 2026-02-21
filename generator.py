@@ -16,7 +16,10 @@ of x[i]
 and a is the coefficient vector of the plane that defines the classification
 
 """
-def make_classification(n, d = 2, u = 1, rand_seed=SEED):
+def make_classification(n, d = 2, u = 1, rand_seed=SEED, test_proportion=0.3):
+    # Number of training data
+    n_train = np.floor(n - (n * test_proportion)).astype(int)
+
     # Random number generator
     rng = np.random.default_rng(seed=rand_seed) 
 
@@ -48,7 +51,8 @@ def make_classification(n, d = 2, u = 1, rand_seed=SEED):
             i -= 1
             print("regenerating point")
 
-    return (x, y, a)
+    # Splitting x into test and training data
+    return (x[:n_train], y[:n_train], x[n_train:], y[n_train:], a)
 
 def make_classification_test():
     (x, y, a) = make_classification(  10, rand_seed= 10)

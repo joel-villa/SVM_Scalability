@@ -111,7 +111,7 @@ class LinearSVC:
 
 if __name__ == "__main__":
     # i = 1
-    X, y, a = make_classification(1000, rand_seed= 11)
+    X, y, x_test, y_test, a = make_classification(1500, rand_seed= 11)
     
     lvc = LinearSVC(n_iter=1000, eta=0.01)
     lvc.fit(X, y, C=15)
