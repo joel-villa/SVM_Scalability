@@ -111,16 +111,15 @@ class LinearSVC:
 
 if __name__ == "__main__":
     # i = 1
-    X, y, a = make_classification(10000, rand_seed= 11)
+    X, y, a = make_classification(1000, rand_seed= 11)
     
-    lvc = LinearSVC(n_iter=1000, eta=0.001)
-    lvc.fit(X, y, C=10)
+    lvc = LinearSVC(n_iter=1000, eta=0.01)
+    lvc.fit(X, y, C=15)
     y_hat = lvc.predict(X)
 
     # print(y_hat)
     gen_plot(X, y_hat, a)
-    display_margins(X, y_hat, lvc.w_, lvc.b_)
-    
+    display_margins(X, y, lvc.w_, lvc.b_)
 
     fig, ax = plt.subplots(figsize=(16,8))
     # print(lvc.losses_)
