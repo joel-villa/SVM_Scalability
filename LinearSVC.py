@@ -27,12 +27,13 @@ class LinearSVC:
       Number of misclassifications (updates) in each epoch.
     
     """
-    def __init__(self, eta=0.01, n_iter=50, random_state=1):
+    def __init__(self, eta=0.01, n_iter=50, C = 1, random_state=1):
         self.eta = eta
         self.n_iter = n_iter
         self.random_state = random_state
+        self.C = C
     
-    def fit(self, X, y, C=1):
+    def fit(self, X, y):
         """Fit training data.
         
         Parameters
@@ -69,8 +70,8 @@ class LinearSVC:
 
                 if hinge_lossi > 0:  
                     # Gradient, outside margin
-                    grad_w = self.w_ - C * yi * xi
-                    grad_b = - C * yi
+                    grad_w = self.w_ - self.C * yi * xi
+                    grad_b = - self.C * yi
                 else:
                     # Inside the margin, no gradient
                     grad_w = self.w_
@@ -78,7 +79,7 @@ class LinearSVC:
 
                 self.w_ -= self.eta * grad_w
                 self.b_ -= self.eta * grad_b
-            loss = self._L2_regularization_(hinge_loss, C)
+            loss = self._L2_regularization_(hinge_loss)
             self.losses_.append(loss)
         return self
     
@@ -95,9 +96,9 @@ class LinearSVC:
     Calculate the hinge loss of all samples
     """
 
-    def _L2_regularization_(self, losses, C):
+    def _L2_regularization_(self, losses):
         weight_mag = np.linalg.norm(self.w_)
-        return C * np.mean(losses) + 0.5 * weight_mag * weight_mag
+        return self.C * np.mean(losses) + 0.5 * weight_mag * weight_mag
     
     """
     The hinge lost function
@@ -111,13 +112,14 @@ class LinearSVC:
 
 if __name__ == "__main__":
     # i = 1
-    X, y, x_test, y_test, a = make_classification(1500, rand_seed= 11)
+    X, y, x_test, y_test, a = make_classification(50, rand_seed= 11)
     
-    lvc = LinearSVC(n_iter=1000, eta=0.01)
-    lvc.fit(X, y, C=15)
+    lvc = LinearSVC(n_iter=100, eta=0.01, C=15)
+    lvc.fit(X, y)
     y_hat = lvc.predict(X)
 
     # print(y_hat)
+    gen_plot(X, y, a)
     gen_plot(X, y_hat, a)
     display_margins(X, y, lvc.w_, lvc.b_)
 
