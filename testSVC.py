@@ -132,13 +132,11 @@ def test_svc_loss_convergence_and_time_scikit(type, datasets):
     return results
 
 def plot_loss_grid(results, type):
-    fig, axs = plt.subplots(len(ds), len(ns), figsize=(18, 12), sharey=True)
-    fig.suptitle("Loss Convergence across datasets " + type, fontsize=16)
-
-    fig.subplots_adjust(
-        top=0.90,
-        hspace=0.5,
-        wspace=0.3
+    fig, axs = plt.subplots(
+        len(ds),
+        len(ns),
+        figsize=(20, 14),
+        sharey=True
     )
 
     for i, d in enumerate(ds):
@@ -149,15 +147,31 @@ def plot_loss_grid(results, type):
             fit_time = info["fit_time"]
 
             ax.plot(range(1, len(losses) + 1), losses)
-            ax.set_title(f"d={d}, n={n}")
-            ax.set_xlabel("Epoch")
-            ax.set_ylabel("Loss")
 
-            print(f"d: {d}, n: {n}, time: {fit_time}s")
+            ax.set_title(
+                f"d={d}, n={n}",
+                fontsize=16,
+                pad=10
+            )
+
+            ax.set_xlabel("Epoch", fontsize=14, labelpad=6)
+            ax.set_ylabel("Loss", fontsize=14, labelpad=6)
+
+            ax.tick_params(axis='both', labelsize=12)
 
             ax.grid(True)
 
-    plt.tight_layout(rect=[0, 0, 1, 0.95])
+            print(f"d: {d}, n: {n}, time: {fit_time}s")
+
+    fig.subplots_adjust(
+        top=0.92,
+        bottom=0.08,
+        left=0.08,
+        right=0.98,
+        hspace=0.6,
+        wspace=0.4
+    )
+
     plt.savefig("plots/loss_convergence_grid" + type + ".svg")
     plt.show()
 
