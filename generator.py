@@ -55,19 +55,19 @@ def make_classification(n, d = 2, u = 1, rand_seed=SEED, test_proportion=0.3):
     return (x[:n_train], y[:n_train], x[n_train:], y[n_train:], a)
 
 def make_classification_test():
-    (x, y, a) = make_classification(  10, rand_seed= 10)
+    (x, y, x_test, y_test, a) = make_classification(  10, rand_seed= 10)
     gen_plot(x, y, a)
 
-    (x, y, a) = make_classification( 100, rand_seed=100)
+    (x, y, x_test, y_test, a) = make_classification( 100, rand_seed=100)
     gen_plot(x, y, a)
 
-    (x, y, a) = make_classification(1000, rand_seed=  3)
+    (x, y, x_test, y_test, a) = make_classification(1000, rand_seed=  3)
     gen_plot(x, y, a)
 
-    (x, y, a) = make_classification(  50, rand_seed=  4)
+    (x, y, x_test, y_test, a) = make_classification(  50, rand_seed=  4)
     gen_plot(x, y, a)
 
-    (x, y, a) = make_classification( 500, rand_seed=  5)
+    (x, y, x_test, y_test, a) = make_classification( 500, rand_seed=  5)
     gen_plot(x, y, a)
 
 
