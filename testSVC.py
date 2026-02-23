@@ -5,7 +5,7 @@ import numpy as np
 import time
 import matplotlib.pyplot as plt
 
-N_ITER = 10
+N_ITER = 100
 STEP = N_ITER // 10
 TOLERANCE = 0.0001
 C = 15
@@ -90,9 +90,10 @@ def hinge_loss(y, y_hat, w, C):
     # If vals[i] is less than zero, put zero, otherwise keep vals[i]
     loss = np.where((vals <= 0 ), 0, vals)
 
-    weight_mag = np.linalg.norm(w)
+    # weight_mag = np.linalg.norm(w)
 
-    return C * np.mean(loss) + 0.5 * weight_mag * weight_mag
+    return np.mean(loss) 
+    # return C * np.mean(loss) #+ 0.5 * weight_mag * weight_mag
 
 
 def test_svc_loss_convergence_and_time_scikit(type, datasets):
@@ -109,17 +110,12 @@ def test_svc_loss_convergence_and_time_scikit(type, datasets):
             elapsed = time.perf_counter() - start
             
             losses = []
-            print(range(1, N_ITER, STEP))
             for i in range(1,N_ITER, STEP):
                 lvc = LinearSVC(dual=type, tol=TOLERANCE, C=C, max_iter=i)
                 lvc.fit(X=X, y=y)
-                # print(f"np.shape(lvc.coeef_) = {np.shape(lvc.coef_)}")
-                # print(f"np.shape(X) = {np.shape(X)}")
-                # print(np.shape(X * lvc.coef_))
-                y_hat = np.dot(X, lvc.coef_.T)+ lvc.intercept_
-                # print(y_hat)
+
+                y_hat = lvc.predict(X)
                 loss = hinge_loss(y=y, y_hat=y_hat, w=lvc.coef_, C=C)
-                print(f"loss: {loss}")
                 losses.append(loss)
 
             results[(d, n)] = {
@@ -184,6 +180,7 @@ if __name__ == "__main__":
     results = test_svc_loss_convergence_and_time(
         datasets=datasets,
     )
+    print("IMPLEMENTED")
     plot_loss_grid(results=results, type="Implemented")
 
 
@@ -192,6 +189,7 @@ if __name__ == "__main__":
         datasets=datasets,
         type=False #dual = false
     )
+    print("PRIMAL")
     plot_loss_grid(results=results, type="Primal")
 
      # DUAL 
@@ -199,6 +197,7 @@ if __name__ == "__main__":
         datasets=datasets,
         type=True #dual = true
     )
+    print("DUAL")
     plot_loss_grid(results=results, type="Dual")
 
     # print(datasets[0][0])

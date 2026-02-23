@@ -97,8 +97,9 @@ class LinearSVC:
     """
 
     def _L2_regularization_(self, losses):
-        weight_mag = np.linalg.norm(self.w_)
-        return self.C * np.mean(losses) + 0.5 * weight_mag * weight_mag
+        # weight_mag = np.linalg.norm(self.w_)
+        return np.mean(losses) #+ 0.5 * weight_mag * weight_mag
+        # return self.C * np.mean(losses) + 0.5 * weight_mag * weight_mag
     
     """
     The hinge lost function
@@ -119,7 +120,7 @@ if __name__ == "__main__":
     y_hat = lvc.predict(X)
 
     # print(y_hat)
-    gen_plot(X, y, a)
+    # gen_plot(X, y, a)
     gen_plot(X, y_hat, a)
     display_margins(X, y, lvc.w_, lvc.b_)
 
