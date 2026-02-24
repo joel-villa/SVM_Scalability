@@ -1,5 +1,6 @@
 import numpy as np
-from plots.part_one import gen_plot
+from plots.part_one import get_line_pts
+import matplotlib.pyplot as plt
 
 SEED = 1
 
@@ -54,22 +55,74 @@ def make_classification(n, d = 2, u = 1, rand_seed=SEED, test_proportion=0.3):
     # Splitting x into test and training data
     return (x[:n_train], y[:n_train], x[n_train:], y[n_train:], a)
 
+def make_plot(xs, ys, cs):
+    fig, axs = plt.subplots(
+        1,
+        len(xs),
+        figsize=(10, 3),
+        sharey=True
+    )
+    for i in range(len(xs)):
+        ax = axs[i]
+
+
+        pts = xs[i]
+        labels = ys[i]
+        a = cs[i]
+        u = 1
+
+        # Transpose and separate x and y coordinate arrays 
+        x, y = pts.T 
+
+        (x_plot, y_plot) = get_line_pts(a=a, u=u)
+
+        ax.plot(x_plot, y_plot, label='hyperplane', color='black')
+
+        colors = np.where(labels == 1, 'red', 'blue')
+        ax.scatter(x, y, c=colors, s=10, marker='x') # 'c' for colors, 's' for size
+
+        # Set bounds of graph 
+        ax.set_ylim(-u, u)
+
+        # Square, hopefully 
+        ax.set_aspect('equal', adjustable='box')
+    
+    # plt.title("Generated Points")
+    plt.tight_layout()
+    plt.savefig("plots/generated_points.svg")
+
+    plt.show()
+
 def make_classification_test():
-    (x, y, x_test, y_test, a) = make_classification(  10, rand_seed= 10)
-    gen_plot(x, y, a)
+    xs = []
+    ys = []
+    cs = []
+    (x, y, _, _, a) = make_classification(  10, rand_seed= 10)
+    xs.append(x)
+    ys.append(y)
+    cs.append(a)
 
-    (x, y, x_test, y_test, a) = make_classification( 100, rand_seed=100)
-    gen_plot(x, y, a)
+    (x, y, _, _, a) = make_classification( 100, rand_seed=100)
+    xs.append(x)
+    ys.append(y)
+    cs.append(a)
 
-    (x, y, x_test, y_test, a) = make_classification(1000, rand_seed=  3)
-    gen_plot(x, y, a)
+    (x, y, _, _, a) = make_classification(1000, rand_seed=  3)
+    xs.append(x)
+    ys.append(y)
+    cs.append(a)
 
-    (x, y, x_test, y_test, a) = make_classification(  50, rand_seed=  4)
-    gen_plot(x, y, a)
+    (x, y, _, _, a) = make_classification(  50, rand_seed=  4)
+    xs.append(x)
+    ys.append(y)
+    cs.append(a)
 
-    (x, y, x_test, y_test, a) = make_classification( 500, rand_seed=  5)
-    gen_plot(x, y, a)
+    # (x, y, _, _, a) = make_classification( 500, rand_seed=  5)
+    # xs.append(x)
+    # ys.append(y)
+    # cs.append(a)
 
+    make_plot(xs, ys, cs)
 
 if __name__ == "__main__":
     make_classification_test()
