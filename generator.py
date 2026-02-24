@@ -97,22 +97,22 @@ def make_classification_test():
     xs = []
     ys = []
     cs = []
-    (x, y, _, _, a) = make_classification(  10, rand_seed= 10)
+    (x, y, _, _, a) = make_classification(100, rand_seed=10)
     xs.append(x)
     ys.append(y)
     cs.append(a)
 
-    (x, y, _, _, a) = make_classification( 100, rand_seed=100)
+    (x, y, _, _, a) = make_classification(100, rand_seed=100)
     xs.append(x)
     ys.append(y)
     cs.append(a)
 
-    (x, y, _, _, a) = make_classification(1000, rand_seed=  3)
+    (x, y, _, _, a) = make_classification(100, rand_seed=  3)
     xs.append(x)
     ys.append(y)
     cs.append(a)
 
-    (x, y, _, _, a) = make_classification(  50, rand_seed=  4)
+    (x, y, _, _, a) = make_classification(100, rand_seed=  4)
     xs.append(x)
     ys.append(y)
     cs.append(a)
