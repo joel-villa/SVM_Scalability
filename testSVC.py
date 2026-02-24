@@ -7,12 +7,12 @@ import matplotlib.pyplot as plt
 
 N_ITER = 100
 STEP = N_ITER // 10
-TOLERANCE = 0.0001
+TOLERANCE = 0.1
 C = 15
 
 
 ds = [10, 50, 100]
-ns = [50, 5000, 50000]
+ns = [500, 5000, 50000]
 
 def test(d_max):
     n = d_max * d_max
